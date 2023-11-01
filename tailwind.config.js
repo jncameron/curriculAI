@@ -5,7 +5,7 @@ export default {
 		extend: {}
 	},
 	daisyui: {
-		themes: ['fantasy']
+		themes: ['winter']
 	},
 	plugins: [require('daisyui')]
 };
