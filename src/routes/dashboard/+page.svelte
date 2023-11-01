@@ -6,9 +6,11 @@
 
 	export let data: PageData;
 	let checked: boolean = false;
-	let lessonLevel: string = LessonLevel.INTERMEDIATE;
-	let classType: string = ClassType.GEN;
-	let lessonType: string = LessonType.READING;
+	let lessonLevel: string = '';
+	let classType: string = '';
+	let lessonType: string = '';
+	let lessonTitle: string = '';
+	let inputText: string = '';
 
 	function changeLessonLevel(e: Event) {
 		checked = true;
@@ -34,15 +36,36 @@
 </script>
 
 <div
-	class="p-4 grid lg:grid-cols-2 lg:grid-rows-[auto,auto] gap-4 md:grid-cols-1 md:grid-rows-1 border border-gray-200 h-[100%]"
+	class="md:p-4 grid lg:grid-cols-2 lg:grid-rows-[auto,auto] gap-4 grid-cols-1 grid-rows-1 border border-gray-200 h-[100%]"
 >
 	<div class="bg-grey-100">
 		<div class="join join-vertical w-full">
-			<h1 class="flex max-w-4xl text-2xl font-bold md:text-3xl lg:text-4xl pb-4">Lesson Inputs</h1>
+			<h1 class="flex max-w-4xl text-2xl font-bold md:text-2xl lg:text-3xl pb-4">Lesson Inputs</h1>
+			<div class="collapse collapse-arrow join-item border border-base-300">
+				<input type="checkbox" name="my-accordion-4" {checked} />
+				<div class="collapse-title collapse-close text-xl font-medium">
+					Lesson Title: {#if lessonTitle.length > 0}
+						<span class="text-secondary float-right">{lessonTitle}</span>
+					{:else}
+						<p class="text-error float-right">not entered</p>
+					{/if}
+				</div>
+				<div class="collapse-content">
+					<input
+						bind:value={lessonTitle}
+						class="textarea textarea-bordered textarea-primary w-full resize-none"
+						placeholder="Paste your Input Material Text here..."
+					/>
+				</div>
+			</div>
 			<div class="collapse collapse-arrow join-item border border-base-300">
 				<input type="radio" name="my-accordion-4" {checked} />
 				<div class="collapse-title collapse-close text-xl font-medium">
-					Lesson Level: <span class="text-secondary float-right">{lessonLevel}</span>
+					Lesson Level: {#if lessonLevel.length > 0}
+						<span class="text-secondary float-right">{lessonLevel}</span>
+					{:else}
+						<span class="text-error float-right">not selected</span>
+					{/if}
 				</div>
 				<div class="collapse-content">
 					<button
@@ -76,7 +99,11 @@
 			<div class="collapse collapse-arrow join-item border border-base-300">
 				<input type="radio" name="my-accordion-4" {checked} />
 				<div class="collapse-title collapse-close text-xl font-medium">
-					Class Type: <span class="text-secondary float-right">{classType}</span>
+					Class Type: {#if classType.length > 0}
+						<span class="text-secondary float-right">{classType}</span>
+					{:else}
+						<span class="text-error float-right">not selected</span>
+					{/if}
 				</div>
 				<div class="collapse-content">
 					<button
@@ -94,7 +121,11 @@
 			<div class="collapse collapse-arrow join-item border border-base-300">
 				<input type="radio" name="my-accordion-4" {checked} />
 				<div class="collapse-title collapse-close text-xl font-medium">
-					Lesson Type: <span class="text-secondary float-right">{lessonType}</span>
+					Lesson Type: {#if lessonType.length > 0}
+						<span class="text-secondary float-right">{lessonType}</span>
+					{:else}
+						<span class="text-error float-right">not selected</span>
+					{/if}
 				</div>
 				<div class="collapse-content">
 					<button
@@ -121,10 +152,19 @@
 			</div>
 			<div class="collapse collapse-arrow join-item border border-base-300">
 				<input type="checkbox" name="my-accordion-4" {checked} />
-				<div class="collapse-title collapse-close text-xl font-medium">Input Materials:</div>
+				<div class="collapse-title collapse-close text-xl font-medium">
+					Input Materials: {#if inputText.length > 0}
+						<p class="text text-secondary line-clamp-2 text-sm">
+							{inputText}
+						</p>
+					{:else}
+						<p class="text-error float-right">not entered</p>
+					{/if}
+				</div>
 				<div class="collapse-content">
 					<textarea
-						class="textarea textarea-bordered textarea-primary w-full"
+						bind:value={inputText}
+						class="textarea textarea-bordered textarea-primary w-full resize-none"
 						placeholder="Paste your Input Material Text here..."
 						rows="8"
 					/>

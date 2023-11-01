@@ -7,5 +7,5 @@ export default {
 	daisyui: {
 		themes: ['winter']
 	},
-	plugins: [require('daisyui')]
+	plugins: [require('daisyui', 'tailwindcss/line-clamp')]
 };
