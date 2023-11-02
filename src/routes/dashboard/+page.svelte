@@ -3,14 +3,64 @@
 	import { ClassType } from '$lib/utils/classType';
 	import type { PageData } from './$types';
 	import { LessonType } from '$lib/utils/lessonType';
+	import { Firestore, doc, setDoc, getDoc, DocumentReference } from 'firebase/firestore';
+	import { onMount } from 'svelte';
+	import type { Auth, User } from 'firebase/auth';
 
-	export let data: PageData;
+	export const prerender = false;
+	//export let data: PageData;
 	let checked: boolean = false;
 	let lessonLevel: string = '';
 	let classType: string = '';
 	let lessonType: string = '';
 	let lessonTitle: string = '';
 	let inputText: string = '';
+	let db: Firestore;
+	let auth: Auth;
+	let user: any;
+	let lessonRef: DocumentReference;
+	let userId: string;
+
+	onMount(() => {
+		import(`$lib/firebase`).then((module) => {
+			db = module.db;
+			auth = module.auth;
+			user = module.userData;
+			console.log('user', user);
+			console.log('auth', auth);
+			console.log('db', db);
+
+			async function getLesson() {
+				//user = doc(db, 'users', userId);
+				const lesson = doc(db, 'users', `${user.uid}`, 'sampleLesson', '1modrLrh1W9zjXh84Uie');
+				const docSnap = await getDoc(lesson);
+				// if (docSnap.exists()) {
+				// 	const docData = docSnap.data();
+				// 	lessonLevel = docData.lessonLevel;
+				// 	classType = docData.classType;
+				// 	lessonType = docData.lessonType;
+				// 	lessonTitle = docData.lessonTitle;
+				// 	inputText = docData.inputText;
+				// } else {
+				// 	console.log('Document not found');
+				// }
+				console.log('Document data:', docSnap.data());
+			}
+
+			getLesson();
+		});
+	});
+
+	const generateLesson = async () => {
+		await setDoc(doc(db, 'lessons', 'hmm'), {
+			classType: classType,
+			lessonType: lessonType,
+			lessonTitle: lessonTitle,
+			lessonLevel: lessonLevel,
+			inputText: inputText
+		});
+		console.log('lesson inputs saved');
+	};
 
 	function changeLessonLevel(e: Event) {
 		checked = true;
@@ -172,7 +222,9 @@
 			</div>
 		</div>
 		<div class="flex justify-center pt-4">
-			<button class="btn btn-primary mx-auto items-center justify-center">Generate Lesson</button>
+			<button class="btn btn-primary mx-auto items-center justify-center" on:click={generateLesson}
+				>Generate Lesson</button
+			>
 		</div>
 	</div>
 	<div class="border-b border-gray-200 row-span-2"><p>Lesson Outputs</p></div>
