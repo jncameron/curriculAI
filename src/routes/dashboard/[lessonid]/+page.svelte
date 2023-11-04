@@ -79,7 +79,7 @@
 
 <AuthCheck>
 	<div
-		class="md:p-4 grid lg:grid-cols-2 lg:grid-rows-[auto,auto] gap-4 grid-cols-1 grid-rows-1 border border-gray-200 h-[100%]"
+		class="md:p-4 grid xl:grid-cols-3 lg:grid-cols-2 lg:grid-rows-[auto,auto] gap-4 grid-cols-1 grid-rows-1 border border-gray-200 h-[100%]"
 	>
 		<div class="bg-grey-100">
 			<div class="join join-vertical w-full">
@@ -90,7 +90,7 @@
 					<input type="checkbox" name="my-accordion-4" {checked} />
 					<div class="collapse-title collapse-close text-xl font-medium">
 						Lesson Title: {#if lessonTitle?.length > 0}
-							<span class="text-secondary float-right">{lessonTitle}</span>
+							<span class="text-secondary float-right line-clamp-1">{lessonTitle}</span>
 						{:else}
 							<p class="text-error float-right">not entered</p>
 						{/if}
@@ -99,7 +99,7 @@
 						<input
 							bind:value={lessonTitle}
 							class="textarea textarea-bordered textarea-primary w-full resize-none"
-							placeholder="Paste your Input Material Text here..."
+							placeholder="Enter your lesson title..."
 						/>
 					</div>
 				</div>
@@ -223,7 +223,7 @@
 				>
 			</div>
 		</div>
-		<div class="border-b border-gray-200 row-span-2"><p>Lesson Outputs</p></div>
+		<div class="border-b border-gray-200 row-span-2 xl:col-span-2"><p>Lesson Outputs</p></div>
 
 		<div class="flex flex-col"><p>Chat to Tweak</p></div>
 	</div>

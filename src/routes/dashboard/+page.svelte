@@ -62,23 +62,27 @@
 	</div>
 
 	{#if lessons.length > 0}
-		<div
-			class="p-4 w-full h-full grid grid-flow-row-dense row-span-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
-		>
-			{#each lessons as lesson}
-				<div class="card lg:card-side bg-violet-200 shadow-xl justify-start items-start w-full">
-					<a href="/dashboard/{lesson.lessonId}">
-						<div class="card-body justify-start items-start w-full">
-							<h2 class="card-title text-slate-600">{lesson.lessonTitle || 'Untitled'}</h2>
-							<ul>
-								<li>{lesson.classType}</li>
-								<li>{lesson.lessonLevel}</li>
-								<li>{lesson.lessonType}</li>
-							</ul>
-						</div>
-					</a>
-				</div>
-			{/each}
+		<div class="h-full">
+			<div
+				class="p-4 w-full grid grid-flow-row-dense row-span-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+			>
+				{#each lessons as lesson}
+					<div class="card lg:card-side bg-violet-200 shadow-xl justify-start items-start w-full">
+						<a href="/dashboard/{lesson.lessonId}">
+							<div class="card-body justify-start items-start w-full">
+								<h2 class="card-title text-slate-600 line-clamp-1">
+									{lesson.lessonTitle || 'Untitled'}
+								</h2>
+								<ul>
+									<li>{lesson.classType}</li>
+									<li>{lesson.lessonLevel}</li>
+									<li>{lesson.lessonType}</li>
+								</ul>
+							</div>
+						</a>
+					</div>
+				{/each}
+			</div>
 		</div>
 	{:else}
 		loading
