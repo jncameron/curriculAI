@@ -1,15 +1,6 @@
 <script lang="ts">
 	import { GoogleAuthProvider, signInWithPopup, signOut, type Auth } from 'firebase/auth';
-	import { onMount } from 'svelte';
-	let auth: Auth;
-	let user;
-
-	onMount(() => {
-		import(`$lib/firebase`).then((module) => {
-			auth = module.auth;
-			user = module.user;
-		});
-	});
+	import { auth, user } from '$lib/firebase';
 
 	async function signInWithGoogle() {
 		const provider = new GoogleAuthProvider();
