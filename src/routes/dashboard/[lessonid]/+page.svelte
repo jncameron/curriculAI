@@ -7,6 +7,7 @@
 	import { db, auth } from '$lib/firebase';
 	import AuthCheck from '$lib/components/AuthCheck.svelte';
 	import type { User } from 'firebase/auth';
+	import type { LessonInputs } from '$lib/utils/lesson';
 
 	//export let data: PageData;
 	let checked: boolean = false;
@@ -16,6 +17,7 @@
 	let lessonTitle: string = '';
 	let inputText: string = '';
 	let user: User;
+	let lessonPlan: string = '';
 	export let data;
 	console.log('data', data.lessonid);
 
@@ -44,14 +46,34 @@
 	}
 
 	const generateLesson = async () => {
+		const lessonInputs: LessonInputs = {
+			lessonId: data.lessonid,
+			lessonLevel,
+			classType,
+			lessonType,
+			lessonTitle,
+			inputText
+		};
 		await setDoc(doc(db, 'users', user.uid, 'lessons', data.lessonid), {
+			lessonLevel: lessonLevel,
 			classType: classType,
 			lessonType: lessonType,
 			lessonTitle: lessonTitle,
-			lessonLevel: lessonLevel,
 			inputText: inputText
 		});
 		console.log('lesson inputs saved');
+
+		const generate = async () => {
+			const res = await fetch('/api/generate', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(lessonInputs)
+			});
+			lessonPlan = await res.text();
+		};
+		generate();
 	};
 
 	function changeLessonLevel(e: Event) {
@@ -86,6 +108,7 @@
 				<h1 class="flex max-w-4xl text-2xl font-bold md:text-2xl lg:text-3xl pb-4">
 					Lesson Inputs
 				</h1>
+
 				<div class="collapse collapse-arrow join-item border border-base-300">
 					<input type="checkbox" name="my-accordion-4" {checked} />
 					<div class="collapse-title collapse-close text-xl font-medium">
@@ -223,7 +246,121 @@
 				>
 			</div>
 		</div>
-		<div class="border-b border-gray-200 row-span-2 xl:col-span-2"><p>Lesson Outputs</p></div>
+		<div class="border-b border-gray-200 row-span-2 xl:col-span-2">
+			<p>Lesson Outputs</p>
+			<div>{lessonPlan}</div>
+			<h1>Adult ESL Lesson Plan - Reading</h1>
+			\n\t
+			<h2>Lesson Type: Reading</h2>
+			\n\t
+			<h2>Class Type: General English</h2>
+			\n\t
+			<h2>Level: Intermediate</h2>
+			\n\t
+			<h2>Lesson Title: The Football Match is a great day out for everyone</h2>
+			\n\n\t
+			<h3>Input Materials</h3>
+			\n\t
+			<p>
+				Watching live football is a great way to enjoy the sport as a family. It may be difficult
+				for many people to afford attending a Premier League game as a family of four, but there are
+				other options available. Many lower league clubs have started offering more affordable
+				prices for families to attend their games. Some clubs provide family tickets, while others
+				offer discounted or even free entry for kids. Even England games at Wembley Stadium have
+				become more affordable, with the creation of a family zone when the national team plays at
+				home.
+			</p>
+			\n\n\t
+			<p>
+				The Women's Super League (WSL) is another great option for families. All games in the WSL
+				provide a family-friendly environment, cost-friendly tickets, and the opportunity to see top
+				teams like Chelsea, Arsenal, Manchester City, and other world-class teams. Players in the
+				WSL are also known to spend time after games taking selfies and signing autographs for kids,
+				making the experience even more memorable.
+			</p>
+			\n\n\t
+			<p>
+				Attending a live football game creates a thrilling atmosphere, whether it's a high-profile
+				match like the North London derby at the Emirates Stadium or a non-league game. Take a look
+				at the options available in your local area, choose a club that suits your needs, and have a
+				great time!
+			</p>
+			\n\n\t
+			<hr />
+			\n\n\t
+			<h3>Pre-Reading Activities</h3>
+			\n\t
+			<ul>
+				\n\t\t
+				<li>
+					Review any vocabulary related to football, such as \"Premier League,\" \"Wembley
+					Stadium,\" \"non-league,\" etc.
+				</li>
+				\n\t\t
+				<li>
+					Discuss with the students their experience with football games and if they have ever
+					attended one as a family.
+				</li>
+				\n\t\t
+				<li>
+					Introduce the concept of family-friendly events and ask the students if they know any
+					other examples.
+				</li>
+				\n\t
+			</ul>
+			\n\n\t
+			<h3>While-Reading Activities</h3>
+			\n\t
+			<ul>
+				\n\t\t
+				<li>Provide the students with a copy of the simplified version of the text.</li>
+				\n\t\t
+				<li>Read the text aloud and have the students follow along.</li>
+				\n\t\t
+				<li>
+					Ask comprehension questions to check understanding, such as:\n\t\t\t
+					<ul>
+						\n\t\t\t\t
+						<li>What are some ways in which families can enjoy live football?</li>
+						\n\t\t\t\t
+						<li>Why are lower league clubs a more affordable option for families?</li>
+						\n\t\t\t\t
+						<li>What does the Women's Super League offer to families?</li>
+						\n\t\t\t\t
+						<li>Why is attending a live game exciting?</li>
+						\n\t\t\t
+					</ul>
+					\n\t\t
+				</li>
+				\n\t
+			</ul>
+			\n\n\t
+			<h3>Post-Reading Activities</h3>
+			\n\t
+			<ul>
+				\n\t\t
+				<li>
+					Have a group discussion about the benefits of attending a live football game as a family.
+				</li>
+				\n\t\t
+				<li>
+					Ask the students if they would like to attend a football game as a family and encourage
+					them to share their preferences.
+				</li>
+				\n\t\t
+				<li>
+					Assign a writing task where students write about their ideal family day out at a football
+					match.
+				</li>
+				\n\t\t
+				<li>
+					If possible, show the students images or videos of football games to further engage their
+					interest.
+				</li>
+				\n\t
+			</ul>
+			\n\n
+		</div>
 
 		<div class="flex flex-col"><p>Chat to Tweak</p></div>
 	</div>

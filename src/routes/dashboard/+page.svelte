@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AuthCheck from '$lib/components/AuthCheck.svelte';
 	import Header from '$lib/components/Header.svelte';
-	import type { LessonInfo } from '$lib/utils/lessonInfo';
+	import type { LessonInputs } from '$lib/utils/lesson';
 	import { onMount } from 'svelte';
 	import {
 		Firestore,
@@ -17,7 +17,7 @@
 	import { auth, db } from '$lib/firebase';
 
 	let user: User;
-	let lessons: LessonInfo[] = [];
+	let lessons: LessonInputs[] = [];
 
 	onMount(async () => {
 		await auth.onAuthStateChanged((firebaseUser) => {
@@ -34,12 +34,13 @@
 		const querySnapshot = await getDocs(lessonsCollectionRef);
 		querySnapshot.forEach((doc) => {
 			const data = doc.data();
-			const lesson: LessonInfo = {
+			const lesson: LessonInputs = {
+				lessonId: doc.id,
 				lessonLevel: data.lessonLevel,
 				classType: data.classType,
 				lessonType: data.lessonType,
 				lessonTitle: data.lessonTitle,
-				lessonId: doc.id
+				inputText: data.inputText
 			};
 			const exists = lessons.some((existingLesson) => existingLesson.lessonId === lesson.lessonId);
 			if (!exists) {
