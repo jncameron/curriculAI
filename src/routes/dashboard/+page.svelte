@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AuthCheck from '$lib/components/AuthCheck.svelte';
 	import Header from '$lib/components/Header.svelte';
-	import type { LessonInputs } from '$lib/utils/lesson';
+	import type { Lesson } from '$lib/utils/lesson';
 	import { onMount } from 'svelte';
 	import {
 		Firestore,
@@ -10,14 +10,18 @@
 		getDoc,
 		DocumentReference,
 		collection,
-		getDocs
+		getDocs,
+		deleteDoc
 	} from 'firebase/firestore';
 	import type { User } from 'firebase/auth';
 	import { v4 as uuidv4 } from 'uuid';
 	import { auth, db } from '$lib/firebase';
-
+	import { Trash } from 'lucide-svelte';
+	let apiKey = 'vvnpqrv0imxp0leetujd83xl0inhtp5nvizxdl5coqux458o';
+	let isModalOpen = false;
 	let user: User;
-	let lessons: LessonInputs[] = [];
+	let lessons: Lesson[] = [];
+	$: lessons;
 
 	onMount(async () => {
 		await auth.onAuthStateChanged((firebaseUser) => {
@@ -34,25 +38,30 @@
 		const querySnapshot = await getDocs(lessonsCollectionRef);
 		querySnapshot.forEach((doc) => {
 			const data = doc.data();
-			const lesson: LessonInputs = {
+			const lesson: Lesson = {
 				lessonId: doc.id,
 				lessonLevel: data.lessonLevel,
 				classType: data.classType,
 				lessonType: data.lessonType,
 				lessonTitle: data.lessonTitle,
-				inputText: data.inputText
+				inputText: data.inputText,
+				lessonPlan: data.lessonPlan
 			};
 			const exists = lessons.some((existingLesson) => existingLesson.lessonId === lesson.lessonId);
 			if (!exists) {
 				lessons = [...lessons, lesson];
-				//lessons.push(lesson);
 			}
 		});
+	}
+
+	async function deleteLesson(lessonId: string) {
+		await deleteDoc(doc(db, 'users', user.uid, 'lessons', lessonId));
+		isModalOpen = false;
 	}
 	const lessonId = uuidv4();
 </script>
 
-<div class="grid h-full items-center grid-rows-3 mx-auto my-auto flex flex-auto">
+<div class="grid h-full items-center grid-rows-3 mx-auto my-auto flex-auto">
 	<div class="w-full h-full flex border-b border-primary">
 		<a
 			class="text-sm lg:text-lg mx-auto btn btn-primary w-1/6 my-auto"
@@ -68,19 +77,51 @@
 				class="p-4 w-full grid grid-flow-row-dense row-span-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4"
 			>
 				{#each lessons as lesson}
-					<div class="card lg:card-side bg-violet-200 shadow-xl justify-start items-start w-full">
-						<a href="/dashboard/{lesson.lessonId}">
-							<div class="card-body justify-start items-start w-full">
+					<div
+						class="card lg:card-side bg-white-500 shadow-xl justify-start items-start w-full border relative"
+					>
+						<div class="card-body justify-start items-start w-full">
+							<a href="/dashboard/{lesson.lessonId}">
 								<h2 class="card-title text-slate-600 line-clamp-1">
 									{lesson.lessonTitle || 'Untitled'}
 								</h2>
 								<ul>
-									<li>{lesson.classType}</li>
-									<li>{lesson.lessonLevel}</li>
-									<li>{lesson.lessonType}</li>
+									{#if lesson.classType}
+										<li class="badge badge-outline badge-accent line-clamp-1 mb-2">
+											{lesson.classType}
+										</li>
+									{/if}
+									{#if lesson.lessonLevel}
+										<li class="badge badge-outline badge-accent line-clamp-1 mb-2">
+											{lesson.lessonLevel}
+										</li>
+									{/if}
+									{#if lesson.lessonType}
+										<li class="badge badge-outline badge-accent line-clamp-1">
+											{lesson.lessonType}
+										</li>
+									{/if}
 								</ul>
+							</a>
+							<div class="card-actions justify-end absolute bottom-2 right-2">
+								<div class="modal" class:modal-open={isModalOpen}>
+									<div class="modal-box">
+										<h3 class="font-bold text-lg">Delete {lesson.lessonTitle}</h3>
+										<p class="py-4">Are you sure you want to delete this lesson?</p>
+										<div class="modal-action">
+											<!-- 🔵 set false on click -->
+											<button class="btn" on:click={() => (isModalOpen = false)}>Cancel</button>
+											<button class="btn btn-error" on:click={() => deleteLesson(lesson.lessonId)}
+												>Delete</button
+											>
+										</div>
+									</div>
+								</div>
+								<button class="btn btn-primary" on:click={() => (isModalOpen = true)}
+									><Trash /></button
+								>
 							</div>
-						</a>
+						</div>
 					</div>
 				{/each}
 			</div>

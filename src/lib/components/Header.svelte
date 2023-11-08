@@ -19,7 +19,7 @@
 
 <header>
 	<nav
-		class="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all"
+		class="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 backdrop-blur-lg transition-all"
 	>
 		<div class="p-6 flex h-14 items-center justify-between border-b border-zinc-200">
 			<a class="flex z-40 font-semibold btn btn-primary" href="/">
@@ -28,12 +28,12 @@
 
 			<div class="hidden items-center space-x-4 sm:flex">
 				{#if $user}
-					<button class="btn btn-ghost" on:click={signOutUser}> Sign out </button>
+					<a class="btn btn-outline" href="/dashboard"> Dashboard </a>
+					<button class="btn btn-outline btn-error" on:click={signOutUser}> Sign out </button>
 				{:else}
-					<button class="btn btn-ghost"> Pricing </button>
-					<button class="btn btn-ghost" on:click={signInWithGoogle}> Sign in </button>
+					<button class="btn btn-outline"> Pricing </button>
+					<button class="btn btn-outline btn-info" on:click={signInWithGoogle}> Sign in </button>
 				{/if}
-				<a class="btn btn-ghost" href="/dashboard"> Dashboard </a>
 			</div>
 		</div>
 	</nav>

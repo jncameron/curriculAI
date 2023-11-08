@@ -1,17 +1,19 @@
-export class LessonInputs {
+export class Lesson {
 	lessonLevel: string;
 	classType: string;
 	lessonType: string;
 	lessonTitle: string;
 	lessonId: string;
 	inputText: string;
+	lessonPlan: string;
 	constructor(
 		lessonLevel: string,
 		classType: string,
 		lessonType: string,
 		lessonTitle: string,
 		lessonId: string,
-		inputText: string
+		inputText: string,
+		lessonPlan: string
 	) {
 		this.lessonLevel = lessonLevel;
 		this.classType = classType;
@@ -19,5 +21,6 @@ export class LessonInputs {
 		this.lessonTitle = lessonTitle;
 		this.lessonId = lessonId;
 		this.inputText = inputText;
+		this.lessonPlan = lessonPlan;
 	}
 }

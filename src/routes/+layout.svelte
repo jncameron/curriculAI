@@ -3,7 +3,6 @@
 	import '../app.css';
 	import Header from '../lib/components/Header.svelte';
 	import { user, userData } from '$lib/firebase';
-
 	$userData;
 	$user;
 	export let data: LayoutData;

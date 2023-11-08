@@ -13,8 +13,11 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@rollup/plugin-commonjs": "^25.0.7",
+		"@rollup/plugin-node-resolve": "^15.2.3",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@tailwindcss/typography": "^0.5.10",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.16",
@@ -24,7 +27,6 @@
 		"eslint-plugin-svelte": "^2.30.0",
 		"init": "^0.1.2",
 		"npx": "^10.2.2",
-		"postcss": "^8.4.31",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.10.1",
 		"svelte": "^4.0.5",
@@ -37,8 +39,11 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@tinymce/tinymce-svelte": "^1.0.1",
 		"@types/uuid": "^9.0.6",
 		"firebase": "^10.5.2",
+		"html-to-docx": "^1.8.0",
+		"lucide-svelte": "^0.292.0",
 		"openai": "^4.15.3",
 		"uuid": "^9.0.1"
 	}
