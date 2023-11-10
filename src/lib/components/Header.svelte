@@ -19,17 +19,17 @@
 
 <header>
 	<nav
-		class="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 backdrop-blur-lg transition-all"
+		class="sticky h-18 inset-x-0 top-0 z-30 border-b border-gray-300 backdrop-blur-lg max-width-xl"
 	>
-		<div class="p-6 flex h-14 items-center justify-between border-b border-zinc-200">
+		<div class="p-6 flex h-20 items-center justify-between border-b border-zinc-200">
 			<a class="flex z-40 font-semibold btn btn-primary" href="/">
 				<span>PeltA</span>
 			</a>
 
 			<div class="hidden items-center space-x-4 sm:flex">
 				{#if $user}
-					<a class="btn btn-outline" href="/dashboard"> Dashboard </a>
-					<button class="btn btn-outline btn-error" on:click={signOutUser}> Sign out </button>
+					<a class="btn btn-glass" href="/dashboard"> Dashboard </a>
+					<button class="btn btn-glass btn-primary" on:click={signOutUser}> Sign out </button>
 				{:else}
 					<button class="btn btn-outline"> Pricing </button>
 					<button class="btn btn-outline btn-info" on:click={signInWithGoogle}> Sign in </button>

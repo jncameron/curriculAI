@@ -17,6 +17,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import { auth, db } from '$lib/firebase';
 	import { Trash } from 'lucide-svelte';
+	import { deleteLesson, getLessons } from '$lib/functions/lessons';
 	let apiKey = 'vvnpqrv0imxp0leetujd83xl0inhtp5nvizxdl5coqux458o';
 	let isModalOpen = false;
 	let user: User;
@@ -27,46 +28,19 @@
 		await auth.onAuthStateChanged((firebaseUser) => {
 			if (firebaseUser) {
 				user = firebaseUser;
-				getLessons(user);
+
 				console.log(lessons);
 			}
 		});
+		lessons = await getLessons(user, lessons);
 	});
 
-	async function getLessons(user: User) {
-		const lessonsCollectionRef = collection(db, 'users', user.uid, 'lessons');
-		const querySnapshot = await getDocs(lessonsCollectionRef);
-		querySnapshot.forEach((doc) => {
-			const data = doc.data();
-			const lesson: Lesson = {
-				lessonId: doc.id,
-				lessonLevel: data.lessonLevel,
-				classType: data.classType,
-				lessonType: data.lessonType,
-				lessonTitle: data.lessonTitle,
-				inputText: data.inputText,
-				lessonPlan: data.lessonPlan
-			};
-			const exists = lessons.some((existingLesson) => existingLesson.lessonId === lesson.lessonId);
-			if (!exists) {
-				lessons = [...lessons, lesson];
-			}
-		});
-	}
-
-	async function deleteLesson(lessonId: string) {
-		await deleteDoc(doc(db, 'users', user.uid, 'lessons', lessonId));
-		isModalOpen = false;
-	}
 	const lessonId = uuidv4();
 </script>
 
-<div class="grid h-full items-center grid-rows-3 mx-auto my-auto flex-auto">
-	<div class="w-full h-full flex border-b border-primary">
-		<a
-			class="text-sm lg:text-lg mx-auto btn btn-primary w-1/6 my-auto"
-			href="/dashboard/{lessonId}"
-		>
+<div class=" grid h-full items-center grid-rows-[auto,auto] mx-auto flex-auto max-w-screen-2xl">
+	<div class="w-full h-full flex border-b border-primary my-auto py-10" id="create-lesson">
+		<a class="text-sm lg:text-lg mx-auto my-auto btn btn-primary" href="/dashboard/{lessonId}">
 			Create Lesson
 		</a>
 	</div>
@@ -74,7 +48,7 @@
 	{#if lessons.length > 0}
 		<div class="h-full">
 			<div
-				class="p-4 w-full grid grid-flow-row-dense row-span-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+				class="p-4 w-full grid grid-flow-row-dense row-span-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
 			>
 				{#each lessons as lesson}
 					<div
@@ -111,8 +85,12 @@
 										<div class="modal-action">
 											<!-- 🔵 set false on click -->
 											<button class="btn" on:click={() => (isModalOpen = false)}>Cancel</button>
-											<button class="btn btn-error" on:click={() => deleteLesson(lesson.lessonId)}
-												>Delete</button
+											<button
+												class="btn btn-error"
+												on:click={() => {
+													deleteLesson(user, lesson.lessonId);
+													isModalOpen = false;
+												}}>Delete</button
 											>
 										</div>
 									</div>
